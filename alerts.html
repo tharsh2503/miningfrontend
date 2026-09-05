@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FogSafe | Alerts & Risk</title>
+
+    <!-- Professional Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <style>
+
+        /* =================================
+           GLOBAL
+        ================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f6fc;
+            color: #202033;
+        }
+
+
+        /* =================================
+           MAIN LAYOUT
+        ================================= */
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #e7e3f2;
+
+            padding: 28px 18px;
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            padding: 0 15px 35px;
+        }
+
+        .logo h1 {
+            font-size: 27px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #5b4bb7;
+        }
+
+        .logo p {
+            margin-top: 5px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #9290a5;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        /* NAV TITLE */
+
+        .nav-title {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #a3a0b5;
+
+            letter-spacing: 1px;
+
+            padding: 0 15px 12px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* NAVIGATION */
+
+        .nav {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .nav a {
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            color: #68657b;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.25s ease;
+        }
+
+
+        .nav a:hover {
+            background: #f1eefc;
+
+            color: #5b4bb7;
+        }
+
+
+        /* ACTIVE ALERT PAGE */
+
+        .nav a.active {
+            background: #eeeafd;
+
+            color: #5b4bb7;
+
+            font-weight: 700;
+        }
+
+
+        .nav-icon {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 17px;
+        }
+
+
+        /* SYSTEM STATUS */
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            background: #f6f4fc;
+
+            padding: 15px;
+
+            border-radius: 12px;
+        }
+
+
+        .system-label {
+            font-size: 11px;
+
+            color: #9491a7;
+
+            font-weight: 600;
+        }
+
+
+        .system-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #303040;
+        }
+
+
+        .online-dot {
+            width: 9px;
+            height: 9px;
+
+            background: #37b779;
+
+            border-radius: 50%;
+
+            box-shadow: 0 0 0 4px #dff6ea;
+        }
+
+
+        /* =================================
+           MAIN CONTENT
+        ================================= */
+
+        .main {
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+
+            padding: 38px 45px;
+        }
+
+
+        /* =================================
+           HEADER
+        ================================= */
+
+        .header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .header-left h2 {
+            font-size: 30px;
+
+            font-weight: 800;
+
+            color: #25233a;
+        }
+
+
+        .header-left p {
+            margin-top: 7px;
+
+            color: #88859b;
+
+            font-size: 13px;
+
+            font-weight: 500;
+        }
+
+
+        /* LIVE BADGE */
+
+        .live-badge {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e2f0;
+
+            padding: 9px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #4e4b61;
+        }
+
+
+        .live-dot {
+            width: 8px;
+
+            height: 8px;
+
+            background: #39b77a;
+
+            border-radius: 50%;
+        }
+
+
+        /* =================================
+           SUMMARY CARDS
+        ================================= */
+
+        .summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .summary-card {
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+        }
+
+
+        .summary-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .summary-title {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #918da2;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.6px;
+        }
+
+
+        .summary-icon {
+            width: 36px;
+
+            height: 36px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #f1eefc;
+
+            font-size: 17px;
+        }
+
+
+        .summary-value {
+            font-size: 26px;
+
+            font-weight: 800;
+
+            color: #2b293b;
+        }
+
+
+        .summary-sub {
+            margin-top: 5px;
+
+            font-size: 11px;
+
+            color: #9a97a9;
+        }
+
+
+        /* =================================
+           FILTER BAR
+        ================================= */
+
+        .filter-bar {
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 13px;
+
+            padding: 13px 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .filter-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .filter-label {
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #8c889c;
+
+            margin-right: 7px;
+        }
+
+
+        .filter-btn {
+            border: 1px solid #e5e1ef;
+
+            background: #ffffff;
+
+            color: #716d81;
+
+            padding: 7px 13px;
+
+            border-radius: 7px;
+
+            font-family: 'Inter', sans-serif;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .filter-btn:hover {
+            background: #f3f0fc;
+
+            color: #5b4bb7;
+        }
+
+
+        .filter-btn.active {
+            background: #eeeafd;
+
+            color: #5b4bb7;
+
+            border-color: #dcd5f3;
+        }
+
+
+        .last-update {
+            font-size: 11px;
+
+            color: #9b98aa;
+        }
+
+
+        /* =================================
+           ALERTS SECTION
+        ================================= */
+
+        .section-title {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .section-title h3 {
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #2c2940;
+        }
+
+
+        .section-title span {
+            font-size: 11px;
+
+            color: #9995a8;
+
+            font-weight: 600;
+        }
+
+
+        /* =================================
+           ALERT CARD
+        ================================= */
+
+        .alert-card {
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            margin-bottom: 15px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+
+            transition: 0.25s ease;
+        }
+
+
+        .alert-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 9px 24px rgba(60, 45, 110, 0.07);
+        }
+
+
+        /* ALERT HEADER */
+
+        .alert-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .risk-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .risk-dot {
+            width: 15px;
+
+            height: 15px;
+
+            border-radius: 50%;
+        }
+
+
+        .high-dot {
+            background: #d74c57;
+
+            box-shadow:
+                0 0 0 5px #f9e3e5;
+        }
+
+
+        .medium-dot {
+            background: #d3a034;
+
+            box-shadow:
+                0 0 0 5px #f8efd9;
+        }
+
+
+        .low-dot {
+            background: #39aa76;
+
+            box-shadow:
+                0 0 0 5px #e0f4e9;
+        }
+
+
+        .risk-heading h4 {
+            font-size: 16px;
+
+            font-weight: 800;
+        }
+
+
+        .high-text {
+            color: #c73e49;
+        }
+
+
+        .medium-text {
+            color: #bd8b22;
+        }
+
+
+        .low-text {
+            color: #329669;
+        }
+
+
+        .alert-time {
+            font-size: 10px;
+
+            color: #a09cad;
+
+            font-weight: 600;
+        }
+
+
+        /* =================================
+           ALERT BODY
+        ================================= */
+
+        .alert-body {
+            display: grid;
+
+            grid-template-columns:
+                1.2fr 2fr 1fr;
+
+            gap: 20px;
+
+            align-items: center;
+        }
+
+
+        /* VEHICLE */
+
+        .vehicle-block {
+            background: #faf9fd;
+
+            border: 1px solid #ece9f4;
+
+            border-radius: 10px;
+
+            padding: 14px;
+        }
+
+
+        .vehicle-name {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            color: #393647;
+
+            margin-bottom: 8px;
+        }
+
+
+        .truck-icon {
+            width: 32px;
+
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eeeafd;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        .vehicle-status {
+            font-size: 10px;
+
+            color: #8f8b9d;
+
+            font-weight: 600;
+        }
+
+
+        /* DETAILS */
+
+        .details-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .detail-label {
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            color: #a29eaf;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+
+        .detail-value {
+            font-size: 13px;
+
+            color: #383545;
+
+            font-weight: 700;
+        }
+
+
+        /* CAUSE */
+
+        .cause {
+            font-size: 11px;
+
+            color: #858194;
+
+            line-height: 1.5;
+        }
+
+
+        .cause strong {
+            display: block;
+
+            color: #4a4658;
+
+            font-size: 11px;
+
+            margin-bottom: 4px;
+        }
+
+
+        /* =================================
+           ACTION BUTTONS
+        ================================= */
+
+        .actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 8px;
+        }
+
+
+        .action-btn {
+            border: none;
+
+            border-radius: 7px;
+
+            padding: 9px 13px;
+
+            font-family: 'Inter', sans-serif;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .brake-btn {
+            background: #f8e4e6;
+
+            color: #c33f49;
+
+            border: 1px solid #f0cdd1;
+        }
+
+
+        .brake-btn:hover {
+            background: #f2d5d8;
+        }
+
+
+        .caution-btn {
+            background: #faf1db;
+
+            color: #b5831f;
+
+            border: 1px solid #efdfb9;
+        }
+
+
+        .caution-btn:hover {
+            background: #f4e8c9;
+        }
+
+
+        .monitor-btn {
+            background: #eeeafd;
+
+            color: #5b4bb7;
+
+            border: 1px solid #ddd6f3;
+        }
+
+
+        .monitor-btn:hover {
+            background: #e3def9;
+        }
+
+
+        /* =================================
+           RESOLVED ALERT
+        ================================= */
+
+        .resolved {
+            opacity: 0.65;
+        }
+
+
+        .resolved-badge {
+            background: #e5f5ed;
+
+            color: #33996a;
+
+            border: 1px solid #cdebdc;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+        }
+
+
+        /* =================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1100px) {
+
+            .summary {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .alert-body {
+                grid-template-columns: 1fr;
+            }
+
+
+            .actions {
+                justify-content: flex-start;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+
+                padding: 20px 8px;
+            }
+
+
+            .logo h1 {
+                font-size: 14px;
+            }
+
+
+            .logo p,
+            .nav-title,
+            .nav a span:not(.nav-icon),
+            .sidebar-bottom {
+                display: none;
+            }
+
+
+            .logo {
+                padding: 0 8px 25px;
+            }
+
+
+            .nav a {
+                justify-content: center;
+
+                padding: 13px 5px;
+            }
+
+
+            .main {
+                margin-left: 70px;
+
+                width: calc(100% - 70px);
+
+                padding: 25px 18px;
+            }
+
+
+            .header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+
+            .filter-bar {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+
+            .filter-left {
+                flex-wrap: wrap;
+            }
+
+
+            .details-grid {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+    <!-- =================================
+         SIDEBAR
+    ================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <h1>FOGSAFE</h1>
+
+            <p>MINING SAFETY SYSTEM</p>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="nav-title">
+            Navigation
+        </div>
+
+
+        <nav class="nav">
+
+
+            <!-- DASHBOARD -->
+
+            <a href="index.html">
+
+                <span class="nav-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <!-- LIVE MAP -->
+
+            <a href="map.html">
+
+                <span class="nav-icon">▣</span>
+
+                <span>Live Map</span>
+
+            </a>
+
+
+            <!-- ALERTS -->
+
+            <a href="alerts.html" class="active">
+
+                <span class="nav-icon">⚠</span>
+
+                <span>Alerts & Risk</span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="sidebar-bottom">
+
+            <div class="system-label">
+                SYSTEM STATUS
+            </div>
+
+            <div class="system-status">
+
+                <span class="online-dot"></span>
+
+                <span>ONLINE</span>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================
+         MAIN CONTENT
+    ================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+
+            <div class="header-left">
+
+                <h2>Alerts & Risk</h2>
+
+                <p>
+                    Monitor safety events and respond to hazardous conditions
+                </p>
+
+            </div>
+
+
+            <div class="live-badge">
+
+                <span class="live-dot"></span>
+
+                LIVE MONITORING
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================
+             SUMMARY
+        ================================== -->
+
+        <section class="summary">
+
+
+            <!-- TOTAL ALERTS -->
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <span class="summary-title">
+                        Total Alerts
+                    </span>
+
+                    <div class="summary-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    3
+                </div>
+
+                <div class="summary-sub">
+                    active safety events
+                </div>
+
+            </div>
+
+
+
+            <!-- HIGH RISK -->
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <span class="summary-title">
+                        High Risk
+                    </span>
+
+                    <div class="summary-icon">
+                        🔴
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    1
+                </div>
+
+                <div class="summary-sub">
+                    immediate attention
+                </div>
+
+            </div>
+
+
+
+            <!-- MEDIUM RISK -->
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <span class="summary-title">
+                        Medium Risk
+                    </span>
+
+                    <div class="summary-icon">
+                        🟠
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    1
+                </div>
+
+                <div class="summary-sub">
+                    monitor closely
+                </div>
+
+            </div>
+
+
+
+            <!-- LOW RISK -->
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <span class="summary-title">
+                        Low Risk
+                    </span>
+
+                    <div class="summary-icon">
+                        🟢
+                    </div>
+
+                </div>
+
+                <div class="summary-value">
+                    1
+                </div>
+
+                <div class="summary-sub">
+                    normal monitoring
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================
+             FILTER
+        ================================== -->
+
+        <div class="filter-bar">
+
+
+            <div class="filter-left">
+
+                <span class="filter-label">
+                    FILTER
+                </span>
+
+
+                <button class="filter-btn active">
+                    All
+                </button>
+
+
+                <button class="filter-btn">
+                    High Risk
+                </button>
+
+
+                <button class="filter-btn">
+                    Medium
+                </button>
+
+
+                <button class="filter-btn">
+                    Low
+                </button>
+
+            </div>
+
+
+            <div class="last-update">
+
+                Last updated: Just now
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             ACTIVE ALERTS
+        ================================== -->
+
+        <div class="section-title">
+
+            <h3>Active Safety Events</h3>
+
+            <span>3 EVENTS DETECTED</span>
+
+        </div>
+
+
+
+        <!-- =================================
+             HIGH RISK ALERT
+        ================================== -->
+
+        <div class="alert-card">
+
+
+            <div class="alert-header">
+
+
+                <div class="risk-heading">
+
+                    <span class="risk-dot high-dot"></span>
+
+                    <h4 class="high-text">
+                        HIGH RISK
+                    </h4>
+
+                </div>
+
+
+                <span class="alert-time">
+                    DETECTED 2 MIN AGO
+                </span>
+
+
+            </div>
+
+
+
+            <div class="alert-body">
+
+
+                <!-- VEHICLE -->
+
+                <div class="vehicle-block">
+
+                    <div class="vehicle-name">
+
+                        <div class="truck-icon">
+                            🚛
+                        </div>
+
+                        Vehicle V002
+
+                    </div>
+
+                    <div class="vehicle-status">
+                        High-risk vehicle
+                    </div>
+
+                </div>
+
+
+
+                <!-- DETAILS -->
+
+                <div class="details-grid">
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Distance
+                        </div>
+
+                        <div class="detail-value">
+                            5.2 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Speed
+                        </div>
+
+                        <div class="detail-value">
+                            41 km/h
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Visibility
+                        </div>
+
+                        <div class="detail-value">
+                            28 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Zone
+                        </div>
+
+                        <div class="detail-value">
+                            Zone B
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- CAUSE -->
+
+                <div class="cause">
+
+                    <strong>
+                        Cause
+                    </strong>
+
+                    Dense Fog + Obstacle
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button class="action-btn brake-btn"
+                    onclick="showAction('BRAKE command sent to Vehicle V002')">
+
+                    🔴 BRAKE
+
+                </button>
+
+
+                <button class="action-btn monitor-btn"
+                    onclick="showAction('Vehicle V002 is being monitored')">
+
+                    VIEW VEHICLE
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             MEDIUM RISK ALERT
+        ================================== -->
+
+        <div class="alert-card">
+
+
+            <div class="alert-header">
+
+
+                <div class="risk-heading">
+
+                    <span class="risk-dot medium-dot"></span>
+
+                    <h4 class="medium-text">
+                        MEDIUM RISK
+                    </h4>
+
+                </div>
+
+
+                <span class="alert-time">
+                    DETECTED 5 MIN AGO
+                </span>
+
+
+            </div>
+
+
+
+            <div class="alert-body">
+
+
+                <!-- VEHICLE -->
+
+                <div class="vehicle-block">
+
+                    <div class="vehicle-name">
+
+                        <div class="truck-icon">
+                            🚛
+                        </div>
+
+                        Vehicle V001
+
+                    </div>
+
+                    <div class="vehicle-status">
+                        Reduced visibility
+                    </div>
+
+                </div>
+
+
+
+                <!-- DETAILS -->
+
+                <div class="details-grid">
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Distance
+                        </div>
+
+                        <div class="detail-value">
+                            12.4 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Speed
+                        </div>
+
+                        <div class="detail-value">
+                            27 km/h
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Visibility
+                        </div>
+
+                        <div class="detail-value">
+                            45 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Zone
+                        </div>
+
+                        <div class="detail-value">
+                            Zone A
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- CAUSE -->
+
+                <div class="cause">
+
+                    <strong>
+                        Cause
+                    </strong>
+
+                    Reduced Visibility
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ACTION -->
+
+            <div class="actions">
+
+                <button class="action-btn caution-btn"
+                    onclick="showAction('CAUTION warning issued for Vehicle V001')">
+
+                    🟠 CAUTION
+
+                </button>
+
+
+                <button class="action-btn monitor-btn"
+                    onclick="showAction('Vehicle V001 is being monitored')">
+
+                    VIEW VEHICLE
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             LOW RISK
+        ================================== -->
+
+        <div class="alert-card">
+
+
+            <div class="alert-header">
+
+
+                <div class="risk-heading">
+
+                    <span class="risk-dot low-dot"></span>
+
+                    <h4 class="low-text">
+                        LOW RISK
+                    </h4>
+
+                </div>
+
+
+                <span class="alert-time">
+                    DETECTED 10 MIN AGO
+                </span>
+
+
+            </div>
+
+
+
+            <div class="alert-body">
+
+
+                <!-- VEHICLE -->
+
+                <div class="vehicle-block">
+
+                    <div class="vehicle-name">
+
+                        <div class="truck-icon">
+                            🚛
+                        </div>
+
+                        Vehicle V003
+
+                    </div>
+
+                    <div class="vehicle-status">
+                        Normal operating condition
+                    </div>
+
+                </div>
+
+
+
+                <!-- DETAILS -->
+
+                <div class="details-grid">
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Distance
+                        </div>
+
+                        <div class="detail-value">
+                            25.8 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Speed
+                        </div>
+
+                        <div class="detail-value">
+                            18 km/h
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Visibility
+                        </div>
+
+                        <div class="detail-value">
+                            72 m
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="detail-label">
+                            Zone
+                        </div>
+
+                        <div class="detail-value">
+                            Zone C
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- CAUSE -->
+
+                <div class="cause">
+
+                    <strong>
+                        Status
+                    </strong>
+
+                    Normal operating conditions
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ACTION -->
+
+            <div class="actions">
+
+                <button class="action-btn monitor-btn"
+                    onclick="showAction('Vehicle V003 status is normal')">
+
+                    ✓ MONITOR
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =================================
+     JAVASCRIPT
+================================== -->
+
+<script>
+
+    function showAction(message) {
+
+        alert(message);
+
+    }
+
+
+    /* Filter button visual selection */
+
+    const filterButtons =
+        document.querySelectorAll(".filter-btn");
+
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            filterButtons.forEach(btn => {
+
+                btn.classList.remove("active");
+
+            });
+
+            this.classList.add("active");
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

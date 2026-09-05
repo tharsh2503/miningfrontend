@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FogSafe | Live Mine Map</title>
+
+    <!-- Professional Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+    <style>
+
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f6fc;
+            color: #202033;
+        }
+
+
+        /* =========================
+           MAIN LAYOUT
+        ========================= */
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #e7e3f2;
+
+            padding: 28px 18px;
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            padding: 0 15px 35px;
+        }
+
+        .logo h1 {
+            font-size: 27px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #5b4bb7;
+        }
+
+        .logo p {
+            margin-top: 5px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #9290a5;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        /* NAVIGATION */
+
+        .nav-title {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #a3a0b5;
+
+            letter-spacing: 1px;
+
+            padding: 0 15px 12px;
+
+            text-transform: uppercase;
+        }
+
+
+        .nav {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .nav a {
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            color: #68657b;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.25s ease;
+        }
+
+
+        .nav a:hover {
+            background: #f1eefc;
+
+            color: #5b4bb7;
+        }
+
+
+        /* ACTIVE PAGE */
+
+        .nav a.active {
+            background: #eeeafd;
+
+            color: #5b4bb7;
+
+            font-weight: 700;
+        }
+
+
+        .nav-icon {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 17px;
+        }
+
+
+        /* SYSTEM STATUS */
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            background: #f6f4fc;
+
+            padding: 15px;
+
+            border-radius: 12px;
+        }
+
+
+        .system-label {
+            font-size: 11px;
+
+            color: #9491a7;
+
+            font-weight: 600;
+        }
+
+
+        .system-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #303040;
+        }
+
+
+        .online-dot {
+            width: 9px;
+            height: 9px;
+
+            background: #37b779;
+
+            border-radius: 50%;
+
+            box-shadow: 0 0 0 4px #dff6ea;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+
+            padding: 38px 45px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header-left h2 {
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            color: #25233a;
+        }
+
+
+        .header-left p {
+
+            margin-top: 7px;
+
+            color: #88859b;
+
+            font-size: 13px;
+
+            font-weight: 500;
+        }
+
+
+        /* LIVE BADGE */
+
+        .live-badge {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e2f0;
+
+            padding: 9px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #4e4b61;
+        }
+
+
+        .live-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            background: #39b77a;
+
+            border-radius: 50%;
+        }
+
+
+        /* =========================
+           MAP LAYOUT
+        ========================= */
+
+        .map-layout {
+
+            display: grid;
+
+            grid-template-columns: 1fr 280px;
+
+            gap: 20px;
+        }
+
+
+        /* =========================
+           MAP CARD
+        ========================= */
+
+        .map-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+        }
+
+
+        .map-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .map-header h3 {
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #2c2940;
+        }
+
+
+        .map-header span {
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #9b98aa;
+        }
+
+
+        /* =========================
+           MINE MAP
+        ========================= */
+
+        .mine-map {
+
+            height: 560px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(91, 75, 183, 0.05) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    rgba(91, 75, 183, 0.05) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            background-color: #f9f8fd;
+
+            border: 1px solid #ebe7f4;
+        }
+
+
+        /* Mine roads */
+
+        .road {
+
+            position: absolute;
+
+            background: #e2dfeb;
+
+            border-radius: 20px;
+        }
+
+
+        .road-one {
+
+            width: 78%;
+
+            height: 18px;
+
+            top: 48%;
+
+            left: 11%;
+
+            transform: rotate(-8deg);
+        }
+
+
+        .road-two {
+
+            width: 16px;
+
+            height: 70%;
+
+            left: 48%;
+
+            top: 15%;
+
+            transform: rotate(8deg);
+        }
+
+
+        .road-three {
+
+            width: 48%;
+
+            height: 14px;
+
+            left: 28%;
+
+            top: 25%;
+
+            transform: rotate(25deg);
+        }
+
+
+        /* =========================
+           FOG ZONE
+        ========================= */
+
+        .fog-zone {
+
+            position: absolute;
+
+            width: 230px;
+
+            height: 160px;
+
+            right: 12%;
+
+            top: 15%;
+
+            border-radius: 50%;
+
+            background: rgba(137, 126, 190, 0.22);
+
+            border: 2px dashed #8d82ba;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #62558f;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .fog-zone::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 190px;
+
+            height: 125px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(98, 85, 143, 0.25);
+        }
+
+
+        /* =========================
+           VEHICLE MARKERS
+        ========================= */
+
+        .vehicle {
+
+            position: absolute;
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+
+            background: #ffffff;
+
+            border: 3px solid;
+
+            box-shadow:
+                0 5px 15px rgba(50, 45, 80, 0.15);
+
+            z-index: 5;
+        }
+
+
+        .vehicle-label {
+
+            position: absolute;
+
+            top: 51px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            white-space: nowrap;
+
+            background: #ffffff;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #444052;
+
+            box-shadow:
+                0 3px 10px rgba(40, 35, 70, 0.08);
+        }
+
+
+        .vehicle-one {
+
+            left: 25%;
+
+            top: 58%;
+
+            border-color: #43ae7a;
+        }
+
+
+        .vehicle-two {
+
+            right: 20%;
+
+            top: 42%;
+
+            border-color: #d74c57;
+        }
+
+
+        /* =========================
+           MAP LABEL
+        ========================= */
+
+        .mine-label {
+
+            position: absolute;
+
+            left: 7%;
+
+            bottom: 8%;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #aaa6b7;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+           RIGHT SIDE PANEL
+        ========================= */
+
+        .side-panel {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 18px;
+        }
+
+
+        .info-card {
+
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+        }
+
+
+        .info-card h3 {
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            color: #2c2940;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           VEHICLE INFO
+        ========================= */
+
+        .vehicle-info {
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            background: #faf9fd;
+
+            border: 1px solid #ece9f4;
+
+            margin-bottom: 10px;
+        }
+
+
+        .vehicle-info:last-child {
+
+            margin-bottom: 0;
+        }
+
+
+        .vehicle-name {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            color: #353244;
+
+            margin-bottom: 10px;
+        }
+
+
+        .status-circle {
+
+            width: 9px;
+
+            height: 9px;
+
+            border-radius: 50%;
+        }
+
+
+        .green {
+
+            background: #39b77a;
+        }
+
+
+        .red {
+
+            background: #d74c57;
+        }
+
+
+        .vehicle-details {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 9px;
+        }
+
+
+        .vehicle-details p:first-child {
+
+            font-size: 9px;
+
+            color: #aaa6b7;
+
+            text-transform: uppercase;
+
+            font-weight: 700;
+        }
+
+
+        .vehicle-details p:last-child {
+
+            margin-top: 3px;
+
+            font-size: 12px;
+
+            color: #3e3a4c;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           LEGEND
+        ========================= */
+
+        .legend-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 13px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: #676477;
+        }
+
+
+        .legend-item:last-child {
+
+            margin-bottom: 0;
+        }
+
+
+        .legend-dot {
+
+            width: 13px;
+
+            height: 13px;
+
+            border-radius: 50%;
+        }
+
+
+        .legend-green {
+
+            background: #39b77a;
+        }
+
+
+        .legend-yellow {
+
+            background: #d6a438;
+        }
+
+
+        .legend-red {
+
+            background: #d74c57;
+        }
+
+
+        .legend-fog {
+
+            background: #b0a5d1;
+        }
+
+
+        /* =========================
+           SAFETY NOTICE
+        ========================= */
+
+        .notice {
+
+            background: #f4f1fc;
+
+            border: 1px solid #e3def3;
+
+            border-radius: 12px;
+
+            padding: 15px;
+        }
+
+
+        .notice-title {
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            color: #62558f;
+
+            margin-bottom: 7px;
+        }
+
+
+        .notice p {
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+            color: #7d7891;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .map-layout {
+
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+
+                display: grid;
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+
+                width: 70px;
+
+                padding: 20px 8px;
+            }
+
+
+            .logo h1 {
+
+                font-size: 14px;
+            }
+
+
+            .logo p,
+            .nav-title,
+            .nav a span:not(.nav-icon),
+            .sidebar-bottom {
+
+                display: none;
+            }
+
+
+            .logo {
+
+                padding: 0 8px 25px;
+            }
+
+
+            .nav a {
+
+                justify-content: center;
+
+                padding: 13px 5px;
+            }
+
+
+            .main {
+
+                margin-left: 70px;
+
+                width: calc(100% - 70px);
+
+                padding: 25px 18px;
+            }
+
+
+            .header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .side-panel {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .mine-map {
+
+                height: 450px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+    <nav>
+
+        <h2>FOGSAFE</h2>
+
+        <a href="index.html">🏠 Dashboard</a>
+
+        <a href="map.html">🗺️ Live Map</a>
+
+        <a href="alerts.html">🚨 Alerts</a>
+
+    </nav>
+
+<div class="dashboard">
+
+
+    <!-- =================================
+         SIDEBAR
+    ================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <h1>FOGSAFE</h1>
+
+            <p>MINING SAFETY SYSTEM</p>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="nav-title">
+            Navigation
+        </div>
+
+
+        <nav class="nav">
+
+
+            <!-- DASHBOARD -->
+
+            <a href="index.html">
+
+                <span class="nav-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <!-- LIVE MAP -->
+
+            <a href="map.html" class="active">
+
+                <span class="nav-icon">▣</span>
+
+                <span>Live Map</span>
+
+            </a>
+
+
+            <!-- ALERTS -->
+
+            <a href="alerts.html">
+
+                <span class="nav-icon">⚠</span>
+
+                <span>Alerts & Risk</span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="sidebar-bottom">
+
+            <div class="system-label">
+                SYSTEM STATUS
+            </div>
+
+            <div class="system-status">
+
+                <span class="online-dot"></span>
+
+                <span>ONLINE</span>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================
+         MAIN CONTENT
+    ================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+
+            <div class="header-left">
+
+                <h2>Live Mine Map</h2>
+
+                <p>
+                    Real-time vehicle location and fog-zone monitoring
+                </p>
+
+            </div>
+
+
+            <div class="live-badge">
+
+                <span class="live-dot"></span>
+
+                LIVE MONITORING
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================
+             MAP + INFORMATION
+        ================================== -->
+
+        <section class="map-layout">
+
+
+            <!-- =================================
+                 MAP
+            ================================== -->
+
+            <div class="map-card">
+
+
+                <div class="map-header">
+
+                    <h3>Mine Area</h3>
+
+                    <span>LIVE LOCATION DATA</span>
+
+                </div>
+
+
+                <div class="mine-map">
+
+
+                    <!-- ROADS -->
+
+                    <div class="road road-one"></div>
+
+                    <div class="road road-two"></div>
+
+                    <div class="road road-three"></div>
+
+
+
+                    <!-- FOG ZONE -->
+
+                    <div class="fog-zone">
+
+                        🌫 FOG ZONE
+
+                    </div>
+
+
+
+                    <!-- VEHICLE 1 -->
+
+                    <div class="vehicle vehicle-one">
+
+                        🚛
+
+                        <div class="vehicle-label">
+                            V001
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- VEHICLE 2 -->
+
+                    <div class="vehicle vehicle-two">
+
+                        🚛
+
+                        <div class="vehicle-label">
+                            V002
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- MINE LABEL -->
+
+                    <div class="mine-label">
+
+                        ACTIVE MINING AREA
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 RIGHT INFORMATION PANEL
+            ================================== -->
+
+            <div class="side-panel">
+
+
+                <!-- VEHICLES -->
+
+                <div class="info-card">
+
+                    <h3>Active Vehicles</h3>
+
+
+                    <!-- V001 -->
+
+                    <div class="vehicle-info">
+
+                        <div class="vehicle-name">
+
+                            <span class="status-circle green"></span>
+
+                            Vehicle V001
+
+                        </div>
+
+
+                        <div class="vehicle-details">
+
+                            <div>
+
+                                <p>Status</p>
+
+                                <p>Normal</p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p>Visibility</p>
+
+                                <p>45 m</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- V002 -->
+
+                    <div class="vehicle-info">
+
+                        <div class="vehicle-name">
+
+                            <span class="status-circle red"></span>
+
+                            Vehicle V002
+
+                        </div>
+
+
+                        <div class="vehicle-details">
+
+                            <div>
+
+                                <p>Status</p>
+
+                                <p>High Risk</p>
+
+                            </div>
+
+
+                            <div>
+
+                                <p>Visibility</p>
+
+                                <p>28 m</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MAP LEGEND -->
+
+                <div class="info-card">
+
+                    <h3>Map Legend</h3>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot legend-green"></span>
+
+                        Safe Vehicle
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot legend-yellow"></span>
+
+                        Warning
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot legend-red"></span>
+
+                        High Risk
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot legend-fog"></span>
+
+                        Fog Zone
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SAFETY NOTICE -->
+
+                <div class="notice">
+
+                    <div class="notice-title">
+
+                        ⚠ SAFETY NOTICE
+
+                    </div>
+
+                    <p>
+
+                        Vehicle V002 is operating near a dense fog zone.
+                        Maintain safe distance and reduce speed.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FOG SAFETY DASHBOARD</title>
+
+    <!-- Professional Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="css/style.css">
+</head>
+    <style>
+
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f6fc;
+            color: #202033;
+        }
+
+        /* =========================
+           MAIN LAYOUT
+        ========================= */
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #e7e3f2;
+
+            padding: 28px 18px;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logo */
+
+        .logo {
+            padding: 0 15px 35px;
+        }
+
+        .logo h1 {
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #5b4bb7;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #9290a5;
+            letter-spacing: 1.5px;
+        }
+
+        /* Navigation */
+
+        .nav-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #a3a0b5;
+            letter-spacing: 1px;
+            padding: 0 15px 12px;
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .nav a {
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            color: #68657b;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.25s ease;
+        }
+
+        .nav a:hover {
+            background: #f1eefc;
+            color: #5b4bb7;
+        }
+
+        /* Active Dashboard */
+
+        .nav a.active {
+            background: #eeeafd;
+            color: #5b4bb7;
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        /* Sidebar bottom */
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            background: #f6f4fc;
+
+            padding: 15px;
+
+            border-radius: 12px;
+        }
+
+        .system-label {
+            font-size: 11px;
+            color: #9491a7;
+            font-weight: 600;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+            font-weight: 700;
+            color: #303040;
+        }
+
+        .online-dot {
+            width: 9px;
+            height: 9px;
+
+            background: #37b779;
+
+            border-radius: 50%;
+
+            box-shadow: 0 0 0 4px #dff6ea;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+
+            padding: 38px 45px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 32px;
+        }
+
+        .header-left h2 {
+            font-size: 30px;
+            font-weight: 800;
+            color: #25233a;
+        }
+
+        .header-left p {
+            margin-top: 7px;
+
+            color: #88859b;
+
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e2f0;
+
+            padding: 9px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            color: #4e4b61;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+
+            background: #39b77a;
+
+            border-radius: 50%;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+
+            border: 1px solid #e8e4f1;
+
+            border-radius: 15px;
+
+            padding: 21px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+
+            transition: 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(60, 45, 110, 0.08);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 17px;
+        }
+
+        .stat-title {
+            font-size: 12px;
+
+            color: #8a879d;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #f0edfc;
+
+            color: #6554c0;
+
+            font-size: 18px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+
+            font-weight: 800;
+
+            color: #27253a;
+        }
+
+        .stat-unit {
+            font-size: 12px;
+
+            color: #9996aa;
+
+            font-weight: 500;
+        }
+
+        /* =========================
+           LOWER GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.35fr
+                1fr;
+
+            gap: 20px;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .panel {
+            background: #ffffff;
+
+            border: 1px solid #e7e3f0;
+
+            border-radius: 15px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 5px 18px rgba(60, 45, 110, 0.04);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #2c2940;
+        }
+
+        .panel-header span {
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #9b98aa;
+        }
+
+        /* =========================
+           MAIN RISK
+        ========================= */
+
+        .risk-box {
+            background: #faf9fd;
+
+            border: 1px solid #ece9f4;
+
+            border-radius: 12px;
+
+            padding: 23px;
+
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .risk-circle {
+            width: 65px;
+            height: 65px;
+
+            border-radius: 50%;
+
+            background: #f4dddd;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-circle-inner {
+            width: 43px;
+            height: 43px;
+
+            border-radius: 50%;
+
+            background: #d94b55;
+        }
+
+        .risk-text h4 {
+            font-size: 20px;
+
+            font-weight: 800;
+
+            color: #c53e49;
+        }
+
+        .risk-text p {
+            margin-top: 6px;
+
+            font-size: 12px;
+
+            color: #8d899c;
+        }
+
+        /* =========================
+           LATEST ALERT
+        ========================= */
+
+        .alert-box {
+            border-left: 4px solid #d94b55;
+
+            background: #fff8f8;
+
+            border-radius: 10px;
+
+            padding: 18px;
+        }
+
+        .alert-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 12px;
+        }
+
+        .alert-dot {
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+
+            background: #d94b55;
+        }
+
+        .alert-title strong {
+            font-size: 14px;
+
+            color: #c53e49;
+        }
+
+        .alert-details {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 13px;
+        }
+
+        .detail p:first-child {
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            color: #aaa6b7;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+        .detail p:last-child {
+            font-size: 13px;
+
+            color: #393648;
+
+            font-weight: 700;
+        }
+
+        /* =========================
+           SAFETY OVERVIEW
+        ========================= */
+
+        .overview {
+            margin-top: 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+        .overview-card {
+            padding: 17px;
+
+            background: #faf9fd;
+
+            border: 1px solid #ece9f4;
+
+            border-radius: 11px;
+        }
+
+        .overview-card h4 {
+            font-size: 11px;
+
+            color: #918da2;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.6px;
+
+            margin-bottom: 9px;
+        }
+
+        .overview-card strong {
+            font-size: 18px;
+
+            color: #302d42;
+        }
+
+        .safe {
+            color: #35a871 !important;
+        }
+
+        .warning {
+            color: #d19a2e !important;
+        }
+
+        .danger {
+            color: #d34a53 !important;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 70px;
+
+                padding: 20px 8px;
+            }
+
+            .logo h1 {
+                font-size: 14px;
+            }
+
+            .logo p,
+            .nav-title,
+            .nav a span:not(.nav-icon),
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .logo {
+                padding: 0 8px 25px;
+            }
+
+            .nav a {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .main {
+                margin-left: 70px;
+
+                width: calc(100% - 70px);
+
+                padding: 25px 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .overview {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                align-items: flex-start;
+
+                gap: 15px;
+
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+<nav>
+
+        <h2>FOGSAFE</h2>
+
+        <a href="index.html">🏠 Dashboard</a>
+
+        <a href="map.html">🗺️ Live Map</a>
+
+        <a href="alerts.html">🚨 Alerts</a>
+
+    </nav>
+
+<div class="dashboard">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>FOGSAFE</h1>
+            <p>MINING SAFETY SYSTEM</p>
+        </div>
+
+
+        <div class="nav-title">
+            Navigation
+        </div>
+
+
+        <nav class="nav">
+
+            <!-- Dashboard -->
+
+            <a href="index.html" class="active">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <!-- Live Map -->
+
+            <a href="map.html">
+                <span class="nav-icon">▣</span>
+                <span>Live Map</span>
+            </a>
+
+
+            <!-- Alerts -->
+
+            <a href="alerts.html">
+                <span class="nav-icon">⚠</span>
+                <span>Alerts & Risk</span>
+            </a>
+
+        </nav>
+
+
+        <!-- Sidebar System Status -->
+
+        <div class="sidebar-bottom">
+
+            <div class="system-label">
+                SYSTEM STATUS
+            </div>
+
+            <div class="system-status">
+
+                <span class="online-dot"></span>
+
+                <span>ONLINE</span>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="header-left">
+
+                <h2>Mining Safety Dashboard</h2>
+
+                <p>
+                    Real-time monitoring of vehicles, visibility and operational risk
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="live-badge">
+
+                    <span class="live-dot"></span>
+
+                    LIVE MONITORING
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="stats">
+
+
+            <!-- Vehicles -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Active Vehicles
+                    </span>
+
+                    <div class="stat-icon">
+                        🚛
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    2
+                </div>
+
+                <span class="stat-unit">
+                    vehicles monitored
+                </span>
+
+            </div>
+
+
+
+            <!-- Visibility -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Visibility
+                    </span>
+
+                    <div class="stat-icon">
+                        ◌
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    28
+                    <span class="stat-unit">m</span>
+                </div>
+
+                <span class="stat-unit">
+                    current visibility
+                </span>
+
+            </div>
+
+
+
+            <!-- Risk -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Risk Score
+                    </span>
+
+                    <div class="stat-icon">
+                        ◈
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    72
+                    <span class="stat-unit">/100</span>
+                </div>
+
+                <span class="stat-unit">
+                    current risk level
+                </span>
+
+            </div>
+
+
+
+            <!-- Alerts -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Active Alerts
+                    </span>
+
+                    <div class="stat-icon">
+                        ⚠
+                    </div>
+
+                </div>
+
+                <div class="stat-value">
+                    1
+                </div>
+
+                <span class="stat-unit">
+                    requires attention
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             RISK + ALERT
+        ========================== -->
+
+        <section class="content-grid">
+
+
+            <!-- MAIN RISK -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Overall Safety Status</h3>
+
+                    <span>REAL-TIME</span>
+
+                </div>
+
+
+                <div class="risk-box">
+
+                    <div class="risk-circle">
+
+                        <div class="risk-circle-inner"></div>
+
+                    </div>
+
+
+                    <div class="risk-text">
+
+                        <h4>HIGH RISK</h4>
+
+                        <p>
+                            Dense fog detected in active mining zone
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Safety overview -->
+
+                <div class="overview">
+
+
+                    <div class="overview-card">
+
+                        <h4>Visibility</h4>
+
+                        <strong class="warning">
+                            28 m
+                        </strong>
+
+                    </div>
+
+
+                    <div class="overview-card">
+
+                        <h4>Vehicles</h4>
+
+                        <strong>
+                            2 Active
+                        </strong>
+
+                    </div>
+
+
+                    <div class="overview-card">
+
+                        <h4>System</h4>
+
+                        <strong class="safe">
+                            ONLINE
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LATEST ALERT -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Latest Alert</h3>
+
+                    <span>JUST NOW</span>
+
+                </div>
+
+
+                <div class="alert-box">
+
+
+                    <div class="alert-title">
+
+                        <span class="alert-dot"></span>
+
+                        <strong>
+                            HIGH RISK DETECTED
+                        </strong>
+
+                    </div>
+
+
+                    <div class="alert-details">
+
+
+                        <div class="detail">
+
+                            <p>Vehicle ID</p>
+
+                            <p>V002</p>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <p>Distance</p>
+
+                            <p>5.2 m</p>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <p>Speed</p>
+
+                            <p>41 km/h</p>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <p>Visibility</p>
+
+                            <p>28 m</p>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <p>Cause</p>
+
+                            <p>Dense Fog + Obstacle</p>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <p>Action</p>
+
+                            <p class="danger">BRAKE</p>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>
